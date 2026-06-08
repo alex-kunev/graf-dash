@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: graf-dash
+    env: docker
+    dockerfilePath: ./apps/demo-app/Dockerfile
+    dockerContext: ./apps/demo-app
+    plan: free
+    healthCheckPath: /metrics

@@ -21,7 +21,9 @@ scrape_configs:
 
   - job_name: demo-app
     static_configs:
-      - targets: ["demo-app:8000"]
+      - targets: ["graf-dash.onrender.com"]
+    scheme: https
+    metrics_path: /metrics
 
   - job_name: alertmanager
     static_configs:
@@ -35,3 +37,13 @@ scrape_configs:
   - job_name: node-exporter
     static_configs:
       - targets: ["node-exporter:9100"]
+
+# ---------------------------------------------------------------------------
+# Grafana Cloud remote_write — paste your credentials from:
+# Connections → Add new connection → Hosted Prometheus metrics
+# ---------------------------------------------------------------------------
+remote_write:
+  - url: https://prometheus-prod-36-prod-us-west-0.grafana.net/api/prom/push
+    basic_auth:
+      username: 2323419
+      password_file: /etc/prometheus/secrets/grafana_cloud_token

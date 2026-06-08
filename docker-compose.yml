@@ -13,15 +13,21 @@ services:
     image: prom/prometheus:v2.51.2
     container_name: prometheus
     restart: unless-stopped
+    environment:
+      GRAFANA_REMOTE_WRITE_URL: ${GRAFANA_REMOTE_WRITE_URL}
+      GRAFANA_CLOUD_USERNAME: ${GRAFANA_CLOUD_USERNAME}
+      GRAFANA_CLOUD_TOKEN: ${GRAFANA_CLOUD_TOKEN}
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=15d
       - --web.enable-lifecycle
       - --web.enable-admin-api
+      - --enable-feature=expand-external-labels
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus/alerts:/etc/prometheus/alerts:ro
+      - ./prometheus/secrets:/etc/prometheus/secrets:ro
       - prometheus_data:/prometheus
     ports:
       - "9090:9090"

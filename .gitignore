@@ -1,6 +1,9 @@
 # Environment variables
 .env
 
+# Prometheus secret files (never commit real tokens)
+prometheus/secrets/
+
 # Docker volumes / data
 grafana_data/
 prometheus_data/

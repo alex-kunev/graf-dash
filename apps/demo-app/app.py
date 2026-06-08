@@ -222,7 +222,8 @@ def simulate_business_metrics() -> None:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
-    port = int(os.environ.get("METRICS_PORT", 8000))
+    # Render sets PORT automatically; fall back to METRICS_PORT for local docker-compose
+    port = int(os.environ.get("PORT") or os.environ.get("METRICS_PORT", 8000))
     start_http_server(port)
     print(f"[demo-app] Prometheus metrics exposed on :{port}/metrics")
 
