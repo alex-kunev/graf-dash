@@ -1,0 +1,18 @@
+# Environment variables
+.env
+
+# Docker volumes / data
+grafana_data/
+prometheus_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,77 @@
+name: Validate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  prometheus-config:
+    name: Validate Prometheus config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check prometheus.yml syntax
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/prometheus:/etc/prometheus:ro" \
+            prom/prometheus:v2.51.2 \
+            promtool check config /etc/prometheus/prometheus.yml
+
+      - name: Lint alert rules
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/prometheus/alerts:/alerts:ro" \
+            prom/prometheus:v2.51.2 \
+            promtool check rules /alerts/*.yml
+
+  alertmanager-config:
+    name: Validate Alertmanager config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check alertmanager.yml syntax
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro" \
+            prom/alertmanager:v0.27.0 \
+            amtool check-config /etc/alertmanager/alertmanager.yml
+
+  grafana-dashboards:
+    name: Validate Grafana dashboard JSON
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint dashboard JSON
+        run: |
+          for f in grafana/dashboards/*.json; do
+            echo "Checking $f..."
+            python3 -c "
+          import json, sys
+          with open('$f') as fh:
+              d = json.load(fh)
+          assert 'uid' in d, 'missing uid'
+          assert 'title' in d, 'missing title'
+          assert 'panels' in d, 'missing panels'
+          print(f'  OK: {d[\"title\"]} ({len(d[\"panels\"])} panels)')
+          "
+          done
+
+  demo-app:
+    name: Build demo-app image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t demo-app:ci apps/demo-app
+
+      - name: Smoke-test metrics endpoint
+        run: |
+          docker run -d --name demo-app-test -p 8000:8000 demo-app:ci
+          sleep 8
+          curl --fail --retry 5 --retry-delay 2 http://localhost:8000/metrics | head -20
+          docker stop demo-app-test

@@ -1,0 +1,73 @@
+# Multi-window, multi-burn-rate SLO alerting (Google SRE Workbook pattern).
+# SLO target: 99.9% availability (error budget: 0.1% = ~43.8 min/month)
+
+groups:
+  - name: slo.rules
+    rules:
+      # --- Recording rules for efficiency ---
+      - record: job:http_requests_total:rate5m
+        expr: sum(rate(http_requests_total[5m]))
+
+      - record: job:http_requests_errors:rate5m
+        expr: sum(rate(http_requests_total{status_code=~"5.."}[5m]))
+
+      - record: job:http_error_ratio:rate5m
+        expr: job:http_requests_errors:rate5m / job:http_requests_total:rate5m
+
+      - record: job:http_error_ratio:rate1h
+        expr: sum(rate(http_requests_total{status_code=~"5.."}[1h])) / sum(rate(http_requests_total[1h]))
+
+      - record: job:http_error_ratio:rate6h
+        expr: sum(rate(http_requests_total{status_code=~"5.."}[6h])) / sum(rate(http_requests_total[6h]))
+
+      - record: job:http_error_ratio:rate1d
+        expr: sum(rate(http_requests_total{status_code=~"5.."}[1d])) / sum(rate(http_requests_total[1d]))
+
+      - record: job:http_error_ratio:rate3d
+        expr: sum(rate(http_requests_total{status_code=~"5.."}[3d])) / sum(rate(http_requests_total[3d]))
+
+      # --- Burn rate alerts ---
+      # Page immediately: burning through budget 14.4x faster than allowed (1h window)
+      - alert: SLOErrorBudgetBurnFast
+        expr: job:http_error_ratio:rate1h > (14.4 * (1 - 0.999))
+        for: 2m
+        labels:
+          severity: critical
+          team: platform
+          slo: availability_999
+          window: 1h
+        annotations:
+          summary: "SLO error budget burning critically fast"
+          description: >-
+            Error rate {{ $value | humanizePercentage }} is 14.4× the SLO budget rate.
+            At this pace the entire monthly budget is consumed in ~2 hours.
+
+      # Page: burning through budget 6x faster (6h window — catches slow burns)
+      - alert: SLOErrorBudgetBurnElevated
+        expr: job:http_error_ratio:rate6h > (6 * (1 - 0.999))
+        for: 15m
+        labels:
+          severity: warning
+          team: platform
+          slo: availability_999
+          window: 6h
+        annotations:
+          summary: "SLO error budget burn rate elevated"
+          description: >-
+            Error rate {{ $value | humanizePercentage }} is 6× the SLO budget rate over 6h.
+            Monthly budget will be exhausted in ~5 days at this rate.
+
+      # Ticket: slow burn over 3 days
+      - alert: SLOErrorBudgetBurnSlow
+        expr: job:http_error_ratio:rate3d > (3 * (1 - 0.999))
+        for: 1h
+        labels:
+          severity: info
+          team: platform
+          slo: availability_999
+          window: 3d
+        annotations:
+          summary: "SLO error budget slow burn detected"
+          description: >-
+            Error rate {{ $value | humanizePercentage }} is 3× the SLO budget rate over 3 days.
+            Review error trends and consider corrective action before budget exhaustion.

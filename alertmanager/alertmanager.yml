@@ -1,0 +1,83 @@
+global:
+  resolve_timeout: 5m
+  # Replace with your webhook URL to enable Slack notifications
+  slack_api_url: "https://hooks.slack.com/services/REPLACE_ME"
+
+route:
+  group_by: ["alertname", "service", "team"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: default-receiver
+
+  routes:
+    - matchers:
+        - severity = critical
+      receiver: critical-alerts
+      continue: true
+
+    - matchers:
+        - team = platform
+      receiver: platform-team
+
+    - matchers:
+        - team = infra
+      receiver: infra-team
+
+    - matchers:
+        - severity = info
+      receiver: ticket-queue
+      group_wait: 10m
+      repeat_interval: 24h
+
+receivers:
+  - name: default-receiver
+    slack_configs:
+      - channel: "#alerts-general"
+        send_resolved: true
+        title: >-
+          [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
+          {{ .CommonLabels.alertname }}
+        text: >-
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Severity:* `{{ .Labels.severity }}`
+          {{ if .Annotations.description }}*Details:* {{ .Annotations.description }}{{ end }}
+          {{ if .Annotations.runbook_url }}*Runbook:* {{ .Annotations.runbook_url }}{{ end }}
+          {{ end }}
+
+  - name: critical-alerts
+    slack_configs:
+      - channel: "#alerts-critical"
+        send_resolved: true
+        title: ":rotating_light: CRITICAL: {{ .CommonLabels.alertname }}"
+        text: >-
+          {{ range .Alerts }}
+          *Service:* {{ .Labels.service | default "N/A" }}
+          *Summary:* {{ .Annotations.summary }}
+          {{ if .Annotations.description }}*Details:* {{ .Annotations.description }}{{ end }}
+          {{ if .Annotations.runbook_url }}*Runbook:* {{ .Annotations.runbook_url }}{{ end }}
+          {{ end }}
+
+  - name: platform-team
+    slack_configs:
+      - channel: "#platform-alerts"
+        send_resolved: true
+
+  - name: infra-team
+    slack_configs:
+      - channel: "#infra-alerts"
+        send_resolved: true
+
+  - name: ticket-queue
+    # Slow-burn alerts — create a ticket instead of paging
+    webhook_configs:
+      - url: "http://ticket-system.example.com/webhook/prometheus"
+
+inhibit_rules:
+  # Suppress warnings when a critical for the same alert+service is firing
+  - source_matchers:
+      - severity = critical
+    target_matchers:
+      - severity = warning
+    equal: ["alertname", "service"]

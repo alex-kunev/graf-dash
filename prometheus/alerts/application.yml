@@ -1,0 +1,82 @@
+groups:
+  - name: application.rules
+    interval: 30s
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[5m])) by (service)
+            /
+            sum(rate(http_requests_total[5m])) by (service)
+          ) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "High error rate on {{ $labels.service }}"
+          description: >-
+            Service {{ $labels.service }} error rate is {{ $value | humanizePercentage }}
+            (threshold 5%). Investigate recent deployments or upstream dependencies.
+          runbook_url: "https://runbooks.example.com/HighErrorRate"
+
+      - alert: CriticalErrorRate
+        expr: |
+          (
+            sum(rate(http_requests_total{status_code=~"5.."}[5m])) by (service)
+            /
+            sum(rate(http_requests_total[5m])) by (service)
+          ) > 0.15
+        for: 1m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "Critical error rate on {{ $labels.service }}"
+          description: >-
+            Service {{ $labels.service }} error rate is {{ $value | humanizePercentage }}
+            (threshold 15%). Immediate action required.
+          runbook_url: "https://runbooks.example.com/CriticalErrorRate"
+
+      - alert: HighP99Latency
+        expr: |
+          histogram_quantile(0.99,
+            sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service)
+          ) > 1.0
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "High p99 latency on {{ $labels.service }}"
+          description: >-
+            p99 latency for {{ $labels.service }} is {{ $value | humanizeDuration }}
+            (threshold 1s). Check for slow queries or resource contention.
+
+      - alert: TrafficDrop
+        expr: |
+          (
+            sum(rate(http_requests_total[5m])) by (service)
+            /
+            sum(rate(http_requests_total[5m] offset 1h)) by (service)
+          ) < 0.5
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "Traffic drop on {{ $labels.service }}"
+          description: >-
+            Traffic for {{ $labels.service }} is >50% below the 1-hour-ago baseline.
+            May indicate an upstream failure or routing issue.
+
+      - alert: ServiceDown
+        expr: |
+          sum(rate(http_requests_total[5m])) by (service) == 0
+        for: 2m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "No traffic received for {{ $labels.service }}"
+          description: "Service {{ $labels.service }} has received no requests for 2 minutes."
