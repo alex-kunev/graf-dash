@@ -6,3 +6,38 @@ services:
     dockerContext: ./apps/demo-app
     plan: free
     healthCheckPath: /metrics
+
+  - type: web
+    name: graf-dash-grafana
+    env: docker
+    dockerfilePath: ./grafana/Dockerfile
+    dockerContext: ./grafana
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: GF_SECURITY_ALLOW_EMBEDDING
+        value: "true"
+      - key: GF_SECURITY_COOKIE_SAMESITE
+        value: disabled
+      - key: GF_AUTH_ANONYMOUS_ENABLED
+        value: "true"
+      - key: GF_AUTH_ANONYMOUS_ORG_ROLE
+        value: Viewer
+      - key: GF_FEATURE_TOGGLES_ENABLE
+        value: publicDashboards
+      - key: GF_USERS_ALLOW_SIGN_UP
+        value: "false"
+      - key: GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH
+        value: /var/lib/grafana/dashboards/golden-signals.json
+      - key: GF_SECURITY_ADMIN_PASSWORD
+        generateValue: true
+
+  - type: worker
+    name: prometheus
+    env: docker
+    dockerfilePath: ./prometheus/Dockerfile
+    dockerContext: ./prometheus
+    plan: free
+    envVars:
+      - key: GRAFANA_CLOUD_TOKEN
+        sync: false

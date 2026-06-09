@@ -1,18 +1,6 @@
 {
-  "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": {"type": "grafana", "uid": "-- Grafana --"},
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      }
-    ]
-  },
-  "description": "The Four Golden Signals — Latency, Traffic, Errors, and Saturation across all microservices.",
+  "annotations": {"list": []},
+  "description": "The Four Golden Signals — Latency, Traffic, Errors, and Saturation across all microservices. (Demo data via TestData datasource — swap to Prometheus when available.)",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -54,14 +42,11 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[$__rate_interval])) by (le, service))",
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "api-gateway",           "startValue": 0.045, "spread": 0.008, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "inventory-service",    "startValue": 0.057, "spread": 0.010, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "order-service",        "startValue": 0.120, "spread": 0.015, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "payment-service",      "startValue": 0.200, "spread": 0.020, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "E", "scenarioId": "random_walk", "alias": "notification-service", "startValue": 0.035, "spread": 0.005, "noise": 2}
       ],
       "title": "Latency — p50 (Median)",
       "type": "timeseries"
@@ -102,14 +87,11 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[$__rate_interval])) by (le, service))",
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "api-gateway",           "startValue": 0.18, "spread": 0.025, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "inventory-service",    "startValue": 0.24, "spread": 0.030, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "order-service",        "startValue": 0.45, "spread": 0.050, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "payment-service",      "startValue": 0.62, "spread": 0.060, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "E", "scenarioId": "random_walk", "alias": "notification-service", "startValue": 0.14, "spread": 0.020, "noise": 2}
       ],
       "title": "Latency — p95",
       "type": "timeseries"
@@ -150,14 +132,11 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket{service=~\"$service\"}[$__rate_interval])) by (le, service))",
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "api-gateway",           "startValue": 0.55, "spread": 0.080, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "inventory-service",    "startValue": 0.72, "spread": 0.090, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "order-service",        "startValue": 1.20, "spread": 0.150, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "payment-service",      "startValue": 1.65, "spread": 0.180, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "E", "scenarioId": "random_walk", "alias": "notification-service", "startValue": 0.42, "spread": 0.060, "noise": 2}
       ],
       "title": "Latency — p99 (Tail)",
       "type": "timeseries"
@@ -197,14 +176,11 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "sum(rate(http_requests_total{service=~\"$service\"}[$__rate_interval])) by (service)",
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "api-gateway",           "startValue": 142, "spread": 12, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "inventory-service",    "startValue":  38, "spread":  5, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "order-service",        "startValue":  47, "spread":  6, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "payment-service",      "startValue":  22, "spread":  4, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "E", "scenarioId": "random_walk", "alias": "notification-service", "startValue":  15, "spread":  3, "noise": 2}
       ],
       "title": "Request Rate (req/s) by Service",
       "type": "timeseries"
@@ -237,14 +213,7 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "active_users_total",
-          "legendFormat": "Active Users",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "Active Users", "startValue": 1240, "spread": 80, "noise": 3}
       ],
       "title": "Active Users",
       "type": "timeseries"
@@ -292,14 +261,11 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "sum(rate(http_requests_total{service=~\"$service\", status_code=~\"5..\"}[$__rate_interval])) by (service) / sum(rate(http_requests_total{service=~\"$service\"}[$__rate_interval])) by (service)",
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "api-gateway",           "startValue": 0.012, "spread": 0.003, "noise": 3},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "inventory-service",    "startValue": 0.008, "spread": 0.002, "noise": 3},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "order-service",        "startValue": 0.021, "spread": 0.005, "noise": 3},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "payment-service",      "startValue": 0.018, "spread": 0.004, "noise": 3},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "E", "scenarioId": "random_walk", "alias": "notification-service", "startValue": 0.005, "spread": 0.002, "noise": 3}
       ],
       "title": "Error Rate (5xx) by Service",
       "type": "timeseries"
@@ -332,14 +298,9 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "sum(rate(http_requests_total{service=~\"$service\", status_code=~\"5..\"}[$__rate_interval])) by (status_code)",
-          "legendFormat": "HTTP {{status_code}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "HTTP 500", "startValue": 1.8, "spread": 0.5, "noise": 3},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "HTTP 502", "startValue": 0.4, "spread": 0.2, "noise": 3},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "HTTP 503", "startValue": 0.2, "spread": 0.1, "noise": 3}
       ],
       "title": "Error Rate by HTTP Status Code (stacked)",
       "type": "timeseries"
@@ -379,14 +340,11 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "active_connections{service=~\"$service\"}",
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "api-gateway",           "startValue": 48, "spread": 8, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "inventory-service",    "startValue": 22, "spread": 5, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "order-service",        "startValue": 31, "spread": 6, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "payment-service",      "startValue": 15, "spread": 4, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "E", "scenarioId": "random_walk", "alias": "notification-service", "startValue": 10, "spread": 3, "noise": 2}
       ],
       "title": "Active Connections by Service",
       "type": "timeseries"
@@ -428,14 +386,11 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "db_connection_pool_usage{service=~\"$service\"}",
-          "legendFormat": "{{service}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "api-gateway",           "startValue": 0.52, "spread": 0.05, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "inventory-service",    "startValue": 0.38, "spread": 0.04, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "order-service",        "startValue": 0.65, "spread": 0.06, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "payment-service",      "startValue": 0.71, "spread": 0.07, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "E", "scenarioId": "random_walk", "alias": "notification-service", "startValue": 0.29, "spread": 0.03, "noise": 2}
       ],
       "title": "DB Connection Pool Usage",
       "type": "timeseries"
@@ -444,29 +399,7 @@
   "refresh": "30s",
   "schemaVersion": 39,
   "tags": ["golden-signals", "portfolio", "sre"],
-  "templating": {
-    "list": [
-      {
-        "current": {"selected": true, "text": "All", "value": "$__all"},
-        "datasource": {"type": "prometheus", "uid": "prometheus"},
-        "definition": "label_values(http_requests_total, service)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Service",
-        "multi": true,
-        "name": "service",
-        "options": [],
-        "query": {
-          "query": "label_values(http_requests_total, service)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "sort": 1,
-        "type": "query"
-      }
-    ]
-  },
+  "templating": {"list": []},
   "time": {"from": "now-1h", "to": "now"},
   "timepicker": {},
   "timezone": "browser",

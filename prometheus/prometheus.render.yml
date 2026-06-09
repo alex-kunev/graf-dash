@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: portfolio-demo
+    stack: graf-dash
+
+rule_files:
+  - /etc/prometheus/alerts/*.yml
+
+remote_write:
+  - url: https://prometheus-prod-36-prod-us-west-0.grafana.net/api/prom/push
+    basic_auth:
+      username: "2323419"
+      password_file: /etc/prometheus/secrets/grafana_cloud_token
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: demo-app
+    static_configs:
+      - targets: ["graf-dash.onrender.com"]
+    scheme: https
+    metrics_path: /metrics

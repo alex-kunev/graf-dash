@@ -19,6 +19,13 @@ jobs:
             prom/prometheus:v2.51.2 \
             promtool check config /etc/prometheus/prometheus.yml
 
+      - name: Check prometheus.render.yml syntax
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/prometheus:/etc/prometheus:ro" \
+            prom/prometheus:v2.51.2 \
+            promtool check config /etc/prometheus/prometheus.render.yml
+
       - name: Lint alert rules
         run: |
           docker run --rm \

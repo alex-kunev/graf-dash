@@ -349,39 +349,36 @@
 <script>
 // ─────────────────────────────────────────────────────────────
 // CONFIGURATION
-// After importing dashboards into Grafana Cloud:
-//   1. Open a dashboard → Share → Public Dashboard → Enable
-//   2. Copy the public URL
-//   3. Paste it into the `url` field below
-//
-// Your Grafana Cloud base URL (e.g. https://yourname.grafana.net)
+// After Render deploys the graf-dash-grafana service, paste its
+// URL below (e.g. https://graf-dash-grafana.onrender.com).
+// Dashboard iframes are built automatically from GRAFANA_BASE.
 // ─────────────────────────────────────────────────────────────
-const GRAFANA_BASE = 'https://yourname.grafana.net';
+const GRAFANA_BASE = 'https://graf-dash-grafana.onrender.com';
 
 const DASHBOARDS = {
   'golden-signals': {
     icon:  '⚡',
     title: 'Golden Signals',
     desc:  'Latency · Traffic · Errors · Saturation',
-    url:   'https://akkunev.grafana.net/public-dashboards/c0a2e7fa166743c0b74988ca8f9a918f',   // public dashboard embed URL
+    url:   GRAFANA_BASE + '/d/golden-signals/golden-signals?orgId=1&kiosk',
   },
   'service-overview': {
     icon:  '🗂',
     title: 'Service Overview',
     desc:  'Per-service health table · Orders · Revenue · Active users',
-    url:   'https://akkunev.grafana.net/public-dashboards/716cb262adfa442ba4a3c465cd68b093',
+    url:   GRAFANA_BASE + '/d/service-overview/service-overview?orgId=1&kiosk',
   },
   'slo-error-budget': {
     icon:  '🎯',
     title: 'SLO / Error Budget',
     desc:  '99.9% availability · Multi-window burn rate · Budget remaining',
-    url:   'https://akkunev.grafana.net/public-dashboards/ee3e213f95ea4a189004641c498995e1',
+    url:   GRAFANA_BASE + '/d/slo-error-budget/slo-error-budget?orgId=1&kiosk',
   },
   'infra-overview': {
     icon:  '🖥',
     title: 'Infrastructure Overview',
     desc:  'CPU · Memory · Disk · Network (node-exporter)',
-    url:   'https://akkunev.grafana.net/public-dashboards/13f8168fccb4409eb24591f41344abba',
+    url:   GRAFANA_BASE + '/d/infrastructure-overview/infrastructure-overview?orgId=1&kiosk',
   },
 };
 

@@ -1,0 +1,34 @@
+// ---------------------------------------------------------------------------
+// Scrape the demo-app running on Render
+// ---------------------------------------------------------------------------
+prometheus.scrape "demo_app" {
+  targets = [
+    {"__address__" = "graf-dash.onrender.com"},
+  ]
+
+  scheme          = "https"
+  metrics_path    = "/metrics"
+  scrape_interval = "15s"
+
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+}
+
+// ---------------------------------------------------------------------------
+// Push to Grafana Cloud managed Prometheus
+// Token is read from the GRAFANA_CLOUD_TOKEN environment variable.
+// ---------------------------------------------------------------------------
+prometheus.remote_write "grafana_cloud" {
+  external_labels = {
+    "environment" = "portfolio-demo",
+    "stack"       = "graf-dash",
+  }
+
+  endpoint {
+    url = "https://prometheus-prod-36-prod-us-west-0.grafana.net/api/prom/push"
+
+    basic_auth {
+      username = "2323419"
+      password = sys.env("GRAFANA_CLOUD_TOKEN")
+    }
+  }
+}
