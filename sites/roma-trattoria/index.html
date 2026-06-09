@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roma Trattoria — Автентична Италианска Пицария, София</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+  <style>
+    /* ——— Design tokens ——— */
+    :root {
+      --primary:        #BE3A2C;
+      --primary-hover:  #9E2F23;
+      --primary-tint:   #F7E6E1;
+      --secondary:      #3F6B45;
+      --ink:            #2B2622;
+      --slate:          #6B6259;
+      --border:         #E7DFD3;
+      --surface:        #FFFFFF;
+      --neutral:        #F6EEE1;
+      --error:          #B5302A;
+
+      --r-sm:   8px;
+      --r-md:   12px;
+      --r-lg:   20px;
+      --r-pill: 9999px;
+
+      --sp-xs:  4px;
+      --sp-sm:  8px;
+      --sp-md:  16px;
+      --sp-lg:  24px;
+      --sp-xl:  40px;
+      --sp-xxl: 80px;
+      --gutter: 24px;
+      --card-p: 20px;
+      --max-w:  1200px;
+    }
+
+    /* ——— Reset ——— */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--neutral);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ——— Utilities ——— */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+    .label-caps {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ——— Buttons ——— */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      white-space: nowrap;
+      border: 2px solid transparent;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--surface);
+      border-color: var(--primary);
+      padding: 13px 24px;
+    }
+    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--ink);
+      padding: 12px 22px;
+    }
+    .btn-secondary:hover { background: var(--ink); color: var(--surface); }
+    .btn-light {
+      background: var(--surface);
+      color: var(--ink);
+      border-color: var(--surface);
+      padding: 13px 28px;
+    }
+    .btn-light:hover { background: var(--neutral); border-color: var(--neutral); }
+
+    /* ——— Tags ——— */
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: var(--r-pill);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .tag-red   { background: var(--primary-tint); color: var(--primary); }
+    .tag-green { background: #E5F0E7; color: var(--secondary); }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow 0.2s;
+    }
+    .site-header.scrolled {
+      box-shadow: 0 2px 20px rgba(43,38,34,0.10);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-lg);
+      height: 68px;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+    }
+    .logo span { color: var(--primary); }
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-xl);
+      list-style: none;
+    }
+    .site-nav a {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--slate);
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+    }
+    .site-nav a:hover { color: var(--ink); }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-lg);
+      flex-shrink: 0;
+    }
+    .header-phone {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--slate);
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--ink);
+      margin: 5px 0;
+      border-radius: 2px;
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      background: var(--neutral);
+      padding: var(--sp-xxl) 0;
+      overflow: hidden;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-xxl);
+      align-items: center;
+    }
+    .hero-eyebrow { color: var(--slate); margin-bottom: var(--sp-lg); }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 60px;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: var(--sp-lg);
+    }
+    .hero-title em { font-style: italic; color: var(--primary); }
+    .hero-desc {
+      font-size: 18px;
+      line-height: 1.65;
+      color: var(--slate);
+      margin-bottom: var(--sp-xl);
+      max-width: 480px;
+    }
+    .hero-actions { display: flex; gap: var(--sp-md); flex-wrap: wrap; }
+    .hero-img-frame {
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, #c9845a 0%, #8b3d13 45%, #2B2622 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 96px;
+      position: relative;
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: var(--sp-lg);
+      left: var(--sp-lg);
+      background: var(--surface);
+      border-radius: var(--r-md);
+      padding: var(--sp-md) var(--sp-lg);
+      box-shadow: 0 4px 24px rgba(43,38,34,0.16);
+    }
+    .hero-badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .hero-badge-label { font-size: 12px; color: var(--slate); margin-top: 3px; }
+
+    /* ============================================================
+       CRAFT / STORY
+    ============================================================ */
+    .craft {
+      padding: var(--sp-xxl) 0;
+      background: var(--surface);
+    }
+    .craft-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-xxl);
+      align-items: center;
+    }
+    .section-eyebrow { color: var(--slate); margin-bottom: var(--sp-md); }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: var(--sp-lg);
+    }
+    .section-body {
+      font-size: 18px;
+      color: var(--slate);
+      line-height: 1.65;
+      margin-bottom: var(--sp-xl);
+    }
+    .craft-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-md);
+    }
+    .craft-pillar {
+      background: var(--neutral);
+      border-radius: var(--r-md);
+      padding: var(--sp-lg) var(--sp-md);
+      text-align: center;
+    }
+    .craft-pillar-icon { font-size: 30px; margin-bottom: var(--sp-sm); }
+    .craft-pillar h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: var(--sp-xs);
+    }
+    .craft-pillar p { font-size: 13px; color: var(--slate); line-height: 1.5; }
+    .craft-img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-md);
+    }
+    .craft-img {
+      border-radius: var(--r-md);
+      overflow: hidden;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .craft-img:first-child { grid-column: 1 / -1; aspect-ratio: 16/9; font-size: 72px; }
+    .craft-img-1 { background: linear-gradient(135deg, #d4956a, #8b3a1f); }
+    .craft-img-2 { background: linear-gradient(135deg, #5a8a40, #2d5c20); }
+    .craft-img-3 { background: linear-gradient(135deg, #c8a96e, #8b6914); }
+
+    /* ============================================================
+       MENU PREVIEW
+    ============================================================ */
+    .menu-preview {
+      padding: var(--sp-xxl) 0;
+      background: var(--neutral);
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--sp-xxl);
+    }
+    .section-header .section-title { margin-bottom: var(--sp-md); }
+    .section-header .section-body { max-width: 560px; margin: 0 auto var(--sp-xs); }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-lg);
+    }
+    .menu-card {
+      background: var(--surface);
+      border-radius: var(--r-md);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(43,38,34,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 32px rgba(43,38,34,0.13);
+    }
+    .menu-card-img {
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+    }
+    .img-margherita { background: linear-gradient(135deg, #e8c97a, #c8531a); }
+    .img-bianca     { background: linear-gradient(135deg, #f0ead8, #c9a870); }
+    .img-prosciutto { background: linear-gradient(135deg, #c47a5a, #8b2c0f); }
+    .img-quattro    { background: linear-gradient(135deg, #e8d8a0, #c49840); }
+    .img-vegan      { background: linear-gradient(135deg, #8ac87a, #3d6b30); }
+    .img-diavola    { background: linear-gradient(135deg, #e8503a, #8b1a0a); }
+    .menu-card-body { padding: var(--card-p); }
+    .menu-card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; min-height: 22px; }
+    .menu-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .menu-card-desc { font-size: 14px; color: var(--slate); line-height: 1.5; margin-bottom: var(--sp-md); }
+    .menu-card-price { display: flex; align-items: baseline; gap: 8px; }
+    .price-main { font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+    .price-secondary { font-size: 14px; color: var(--slate); }
+    .menu-cta { text-align: center; margin-top: var(--sp-xxl); }
+
+    /* ============================================================
+       CATERING BAND
+    ============================================================ */
+    .catering-wrap {
+      padding: 0 var(--gutter) var(--sp-xxl);
+    }
+    .catering-band {
+      background: var(--ink);
+      color: var(--neutral);
+      padding: var(--sp-xxl) 0;
+      border-radius: var(--r-lg);
+    }
+    .catering-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--sp-xxl);
+      align-items: center;
+    }
+    .catering-eyebrow { color: #8a7f78; margin-bottom: var(--sp-md); }
+    .catering-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--neutral);
+      margin-bottom: var(--sp-lg);
+    }
+    .catering-desc { font-size: 18px; color: #b5aba0; line-height: 1.65; max-width: 520px; }
+    .catering-perks { display: flex; gap: var(--sp-xl); margin-top: var(--sp-xl); }
+    .catering-perk-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+    }
+    .catering-perk-label { font-size: 13px; color: #8a7f78; margin-top: 3px; }
+    .catering-action { flex-shrink: 0; display: flex; align-items: center; }
+
+    /* ============================================================
+       LOCATIONS
+    ============================================================ */
+    .locations { padding: var(--sp-xxl) 0; background: var(--surface); }
+    .locations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-lg);
+      margin-top: var(--sp-xxl);
+    }
+    .location-card {
+      background: var(--neutral);
+      border-radius: var(--r-md);
+      padding: var(--sp-xl);
+      border: 1px solid var(--border);
+    }
+    .location-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: var(--sp-lg);
+    }
+    .location-detail {
+      display: flex;
+      gap: var(--sp-md);
+      align-items: flex-start;
+      margin-bottom: var(--sp-md);
+    }
+    .location-icon { font-size: 17px; flex-shrink: 0; margin-top: 2px; }
+    .location-text { font-size: 15px; color: var(--slate); line-height: 1.55; }
+    .location-map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: var(--sp-md);
+      transition: color 0.15s;
+    }
+    .location-map-link:hover { color: var(--primary-hover); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    .site-footer {
+      background: var(--ink);
+      color: var(--neutral);
+      padding: var(--sp-xxl) 0 var(--sp-xl);
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--sp-xxl);
+    }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--neutral);
+      margin-bottom: var(--sp-md);
+    }
+    .footer-brand-name span { color: var(--primary); }
+    .footer-tagline {
+      font-size: 14px;
+      color: #8a7f78;
+      line-height: 1.6;
+      margin-bottom: var(--sp-xl);
+      max-width: 260px;
+    }
+    .footer-socials { display: flex; gap: var(--sp-md); }
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--r-sm);
+      background: rgba(246,238,225,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background 0.15s;
+    }
+    .social-link:hover { background: rgba(246,238,225,0.18); }
+    .footer-col-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8a7f78;
+      margin-bottom: var(--sp-lg);
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: var(--sp-sm); }
+    .footer-links a { font-size: 14px; color: #b5aba0; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--neutral); }
+    .footer-bottom {
+      border-top: 1px solid rgba(231,223,211,0.12);
+      margin-top: var(--sp-xxl);
+      padding-top: var(--sp-xl);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--sp-md);
+    }
+    .footer-copy { font-size: 13px; color: #8a7f78; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 900px) {
+      .site-nav, .header-phone { display: none; }
+      .nav-toggle { display: block; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-title { font-size: 44px; }
+      .hero-img-frame { display: none; }
+      .craft-inner { grid-template-columns: 1fr; }
+      .section-title { font-size: 32px; }
+      .menu-grid { grid-template-columns: repeat(2, 1fr); }
+      .catering-inner { grid-template-columns: 1fr; }
+      .catering-band { border-radius: var(--r-md); }
+      .catering-action { justify-content: flex-start; }
+      .locations-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: var(--sp-xl); }
+    }
+    @media (max-width: 600px) {
+      .hero-title { font-size: 34px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .craft-pillars { grid-template-columns: 1fr; }
+      .catering-perks { flex-wrap: wrap; gap: var(--sp-lg); }
+      .catering-wrap { padding: 0 0 var(--sp-xxl); }
+      .catering-band { border-radius: 0; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     HEADER
+================================================================ -->
+<header class="site-header" id="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <a href="#" class="logo">Roma <span>Trattoria</span></a>
+      <nav aria-label="Основна навигация">
+        <ul class="site-nav">
+          <li><a href="#menu">Меню</a></li>
+          <li><a href="#craft">За нас</a></li>
+          <li><a href="#catering">Кетъринг</a></li>
+          <li><a href="#locations">Локации</a></li>
+        </ul>
+      </nav>
+      <div class="header-right">
+        <span class="header-phone">+359 888 123 456</span>
+        <a href="#menu" class="btn btn-primary">Поръчай</a>
+        <button class="nav-toggle" aria-label="Отвори меню">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ================================================================
+     HERO
+================================================================ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <p class="label-caps hero-eyebrow">От 2009 · Автентична Неаполитанска Пица</p>
+        <h1 class="hero-title">
+          Истинска<br>
+          <em>italiana</em><br>
+          на твоята маса
+        </h1>
+        <p class="hero-desc">
+          Тесто с 48-часова бавна ферментация, домати Сан Марцано и
+          дървена пещ на 480°C. Южна Италия в сърцето на София.
+        </p>
+        <div class="hero-actions">
+          <a href="#menu" class="btn btn-primary">Поръчай сега</a>
+          <a href="#reservation" class="btn btn-secondary">Резервирай</a>
+        </div>
+      </div>
+      <div style="position:relative">
+        <div class="hero-img-frame">🍕</div>
+        <div class="hero-badge">
+          <div class="hero-badge-num">15+</div>
+          <div class="hero-badge-label">вида пица</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CRAFT / STORY
+================================================================ -->
+<section class="craft" id="craft">
+  <div class="container">
+    <div class="craft-inner">
+      <div>
+        <p class="label-caps section-eyebrow">Нашето занаятчийство</p>
+        <h2 class="section-title">Правим пица<br>по стария начин</h2>
+        <p class="section-body">
+          Вярваме, че добрата пица е въпрос на уважение — към продуктите,
+          към времето и към традицията. Използваме брашно тип 00, импортирано
+          директно от Неапол, и оставяме тестото да втаса 48 часа.
+          Никакви компромиси, никакви преки пътища.
+        </p>
+        <div class="craft-pillars">
+          <div class="craft-pillar">
+            <div class="craft-pillar-icon">🌾</div>
+            <h4>Продукти</h4>
+            <p>Брашно 00 от Неапол, домати Сан Марцано, моцарела Фиор ди Лате</p>
+          </div>
+          <div class="craft-pillar">
+            <div class="craft-pillar-icon">⏱</div>
+            <h4>Тесто</h4>
+            <p>48-часова бавна ферментация за хрупкава коричка и лека текстура</p>
+          </div>
+          <div class="craft-pillar">
+            <div class="craft-pillar-icon">🔥</div>
+            <h4>Изпичане</h4>
+            <p>Дървена пещ на 480°C — автентичните обгорени петна включени</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="craft-img-grid">
+          <div class="craft-img craft-img-1">🍕</div>
+          <div class="craft-img craft-img-2">🌿</div>
+          <div class="craft-img craft-img-3">🍅</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     MENU PREVIEW
+================================================================ -->
+<section class="menu-preview" id="menu">
+  <div class="container">
+    <div class="section-header">
+      <p class="label-caps section-eyebrow">Нашето меню</p>
+      <h2 class="section-title">Неаполитански класики</h2>
+      <p class="section-body">
+        Всяка пица е ръчно разточена и печена в момента на поръчка.
+        Цените са посочени в лева и евро.
+      </p>
+    </div>
+    <div class="menu-grid">
+
+      <article class="menu-card">
+        <div class="menu-card-img img-margherita">🍕</div>
+        <div class="menu-card-body">
+          <div class="menu-card-tags">
+            <span class="tag tag-red">Хит</span>
+            <span class="tag tag-green">Вегетарианска</span>
+          </div>
+          <h3 class="menu-card-name">Маргарита</h3>
+          <p class="menu-card-desc">Домати Сан Марцано, моцарела Фиор ди Лате, пресен босилек, зехтин</p>
+          <div class="menu-card-price">
+            <span class="price-main">15 лв</span>
+            <span class="price-secondary">/ €7.60</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="menu-card">
+        <div class="menu-card-img img-bianca">🧀</div>
+        <div class="menu-card-body">
+          <div class="menu-card-tags">
+            <span class="tag tag-red">Ново</span>
+          </div>
+          <h3 class="menu-card-name">Бианка</h3>
+          <p class="menu-card-desc">Крем от рикота, моцарела, пармезан 24 месеца, сушени домати, рукола</p>
+          <div class="menu-card-price">
+            <span class="price-main">19 лв</span>
+            <span class="price-secondary">/ €9.70</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="menu-card">
+        <div class="menu-card-img img-prosciutto">🥩</div>
+        <div class="menu-card-body">
+          <div class="menu-card-tags"></div>
+          <h3 class="menu-card-name">Прошуто е Фунги</h3>
+          <p class="menu-card-desc">Прошуто крудо, печени гъби порчини, моцарела, розмарин</p>
+          <div class="menu-card-price">
+            <span class="price-main">20 лв</span>
+            <span class="price-secondary">/ €10.20</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="menu-card">
+        <div class="menu-card-img img-quattro">🧀</div>
+        <div class="menu-card-body">
+          <div class="menu-card-tags">
+            <span class="tag tag-red">Хит</span>
+          </div>
+          <h3 class="menu-card-name">Куатро Формаджи</h3>
+          <p class="menu-card-desc">Моцарела, горгондзола, пармезан, проволоне, мед от акация</p>
+          <div class="menu-card-price">
+            <span class="price-main">18 лв</span>
+            <span class="price-secondary">/ €9.20</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="menu-card">
+        <div class="menu-card-img img-vegan">🥦</div>
+        <div class="menu-card-body">
+          <div class="menu-card-tags">
+            <span class="tag tag-green">Веган</span>
+          </div>
+          <h3 class="menu-card-name">Прима Вера</h3>
+          <p class="menu-card-desc">Домати Сан Марцано, тиквички, чушки, маслини Тагиаска, каперси</p>
+          <div class="menu-card-price">
+            <span class="price-main">17 лв</span>
+            <span class="price-secondary">/ €8.70</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="menu-card">
+        <div class="menu-card-img img-diavola">🌶</div>
+        <div class="menu-card-body">
+          <div class="menu-card-tags">
+            <span class="tag tag-red">Пикантна</span>
+          </div>
+          <h3 class="menu-card-name">Диавола</h3>
+          <p class="menu-card-desc">Пикантна салами, домати, моцарела, лют зехтин, пресни чили</p>
+          <div class="menu-card-price">
+            <span class="price-main">19 лв</span>
+            <span class="price-secondary">/ €9.70</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+    <div class="menu-cta">
+      <a href="#" class="btn btn-primary">Виж цялото меню</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CATERING BAND
+================================================================ -->
+<div class="catering-wrap">
+  <section class="catering-band" id="catering">
+    <div class="container">
+      <div class="catering-inner">
+        <div>
+          <p class="label-caps catering-eyebrow">Кетъринг &amp; Събития</p>
+          <h2 class="catering-title">Пица на колела —<br>за вашето събитие</h2>
+          <p class="catering-desc">
+            Нашата пица каравана идва при вас — сватби, корпоративни събития,
+            рождени дни. Печем на живо, пред гостите ви.
+            Обхват: София и регионът.
+          </p>
+          <div class="catering-perks">
+            <div>
+              <div class="catering-perk-num">200+</div>
+              <div class="catering-perk-label">кетъринг събития</div>
+            </div>
+            <div>
+              <div class="catering-perk-num">30</div>
+              <div class="catering-perk-label">мин. порции</div>
+            </div>
+            <div>
+              <div class="catering-perk-num">6ч</div>
+              <div class="catering-perk-label">максимален обхват</div>
+            </div>
+          </div>
+        </div>
+        <div class="catering-action">
+          <a href="#" class="btn btn-light">Запитване за кетъринг</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================================================================
+     LOCATIONS
+================================================================ -->
+<section class="locations" id="locations">
+  <div class="container">
+    <div class="section-header">
+      <p class="label-caps section-eyebrow">Намерете ни</p>
+      <h2 class="section-title">Нашите локации</h2>
+    </div>
+    <div class="locations-grid">
+      <div class="location-card">
+        <h3 class="location-name">Roma Trattoria — Лозенец</h3>
+        <div class="location-detail">
+          <span class="location-icon">📍</span>
+          <div class="location-text">ул. Свети Наум 12, кв. Лозенец<br>1407 София</div>
+        </div>
+        <div class="location-detail">
+          <span class="location-icon">🕐</span>
+          <div class="location-text">
+            Пон – Пет: 11:30 – 22:30<br>
+            Съб – Нед: 12:00 – 23:00
+          </div>
+        </div>
+        <div class="location-detail">
+          <span class="location-icon">📞</span>
+          <div class="location-text">+359 888 123 456</div>
+        </div>
+        <a href="#" class="location-map-link">Виж на картата →</a>
+      </div>
+      <div class="location-card">
+        <h3 class="location-name">Roma Trattoria — Витоша</h3>
+        <div class="location-detail">
+          <span class="location-icon">📍</span>
+          <div class="location-text">бул. Витоша 95, кв. Триадица<br>1463 София</div>
+        </div>
+        <div class="location-detail">
+          <span class="location-icon">🕐</span>
+          <div class="location-text">
+            Пон – Пет: 11:30 – 22:30<br>
+            Съб – Нед: 12:00 – 23:00
+          </div>
+        </div>
+        <div class="location-detail">
+          <span class="location-icon">📞</span>
+          <div class="location-text">+359 888 654 321</div>
+        </div>
+        <a href="#" class="location-map-link">Виж на картата →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     FOOTER
+================================================================ -->
+<footer class="site-footer" id="reservation">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand-name">Roma <span>Trattoria</span></div>
+        <p class="footer-tagline">
+          Автентична неаполитанска пица в сърцето на София.
+          Правим я с обич от 2009 година.
+        </p>
+        <div class="footer-socials">
+          <a href="#" class="social-link" aria-label="Instagram">📷</a>
+          <a href="#" class="social-link" aria-label="Facebook">📘</a>
+          <a href="#" class="social-link" aria-label="TikTok">🎵</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title">Меню</p>
+        <ul class="footer-links">
+          <li><a href="#">Пици</a></li>
+          <li><a href="#">Антипасти</a></li>
+          <li><a href="#">Десерти</a></li>
+          <li><a href="#">Напитки</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">За нас</p>
+        <ul class="footer-links">
+          <li><a href="#">История</a></li>
+          <li><a href="#">Занаятчийство</a></li>
+          <li><a href="#">Кетъринг</a></li>
+          <li><a href="#">Кариери</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Контакт</p>
+        <ul class="footer-links">
+          <li><a href="#">Локации</a></li>
+          <li><a href="#">Резервация</a></li>
+          <li><a href="tel:+359888123456">+359 888 123 456</a></li>
+          <li><a href="#">info@roma-trattoria.bg</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Roma Trattoria. Всички права запазени.</p>
+      <p class="footer-copy">Политика за поверителност · Бисквитки</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+</script>
+
+</body>
+</html>

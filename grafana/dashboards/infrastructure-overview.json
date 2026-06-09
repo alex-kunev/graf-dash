@@ -8,7 +8,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -40,20 +40,13 @@
         "textMode": "auto"
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
-          "legendFormat": "CPU Usage",
-          "instant": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "CPU Usage", "startValue": 42, "spread": 8, "noise": 2}
       ],
       "title": "CPU Usage",
       "type": "stat"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "thresholds"},
@@ -83,20 +76,13 @@
         "textMode": "auto"
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
-          "legendFormat": "Memory Usage",
-          "instant": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "Memory Usage", "startValue": 67, "spread": 5, "noise": 1}
       ],
       "title": "Memory Usage",
       "type": "stat"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "thresholds"},
@@ -126,20 +112,13 @@
         "textMode": "auto"
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "(1 - (node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"rootfs\"} / node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"rootfs\"})) * 100",
-          "legendFormat": "Disk Usage",
-          "instant": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "Disk Usage", "startValue": 54, "spread": 1, "noise": 0}
       ],
       "title": "Disk Usage (/)",
       "type": "stat"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "thresholds"},
@@ -167,14 +146,7 @@
         "textMode": "auto"
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "node_load1",
-          "legendFormat": "Load (1m)",
-          "instant": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "Load (1m)", "startValue": 1.4, "spread": 0.3, "noise": 2}
       ],
       "title": "System Load (1m)",
       "type": "stat"
@@ -187,7 +159,7 @@
       "type": "row"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -215,44 +187,16 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[$__rate_interval])) * 100)",
-          "legendFormat": "CPU Total",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "avg(rate(node_cpu_seconds_total{mode=\"user\"}[$__rate_interval])) * 100",
-          "legendFormat": "User",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "avg(rate(node_cpu_seconds_total{mode=\"system\"}[$__rate_interval])) * 100",
-          "legendFormat": "System",
-          "range": true,
-          "refId": "C"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "avg(rate(node_cpu_seconds_total{mode=\"iowait\"}[$__rate_interval])) * 100",
-          "legendFormat": "I/O Wait",
-          "range": true,
-          "refId": "D"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "CPU Total", "startValue": 42, "spread": 8, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "User",       "startValue": 28, "spread": 6, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "System",     "startValue": 10, "spread": 3, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "D", "scenarioId": "random_walk", "alias": "I/O Wait",   "startValue": 4,  "spread": 2, "noise": 2}
       ],
       "title": "CPU Usage by Mode",
       "type": "timeseries"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -278,30 +222,9 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "node_load1",
-          "legendFormat": "1m avg",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "node_load5",
-          "legendFormat": "5m avg",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "node_load15",
-          "legendFormat": "15m avg",
-          "range": true,
-          "refId": "C"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "1m avg",  "startValue": 1.4, "spread": 0.3, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "5m avg",  "startValue": 1.2, "spread": 0.2, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "15m avg", "startValue": 1.0, "spread": 0.1, "noise": 1}
       ],
       "title": "System Load Average",
       "type": "timeseries"
@@ -314,7 +237,7 @@
       "type": "row"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -341,36 +264,15 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "node_memory_MemTotal_bytes",
-          "legendFormat": "Total",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "node_memory_MemAvailable_bytes",
-          "legendFormat": "Available",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "node_memory_Cached_bytes + node_memory_Buffers_bytes",
-          "legendFormat": "Cached + Buffers",
-          "range": true,
-          "refId": "C"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "Total",            "startValue": 8589934592, "spread": 0,          "noise": 0},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "Available",         "startValue": 2684354560, "spread": 104857600, "noise": 2},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "C", "scenarioId": "random_walk", "alias": "Cached + Buffers",  "startValue": 1073741824, "spread": 52428800,  "noise": 1}
       ],
       "title": "Memory Usage",
       "type": "timeseries"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -396,14 +298,8 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "1 - (node_filesystem_avail_bytes{fstype!~\"tmpfs|overlay\",mountpoint!~\"/boot.*\"} / node_filesystem_size_bytes{fstype!~\"tmpfs|overlay\",mountpoint!~\"/boot.*\"})",
-          "legendFormat": "{{mountpoint}}",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "/",     "startValue": 0.54, "spread": 0.002, "noise": 0},
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "B", "scenarioId": "random_walk", "alias": "/data", "startValue": 0.31, "spread": 0.003, "noise": 0}
       ],
       "title": "Disk Usage by Mount",
       "type": "timeseries"
@@ -416,7 +312,7 @@
       "type": "row"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -441,20 +337,13 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "rate(node_network_receive_bytes_total{device!=\"lo\"}[$__rate_interval])",
-          "legendFormat": "{{device}} rx",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "eth0 rx", "startValue": 1258291, "spread": 209715, "noise": 3}
       ],
       "title": "Network Receive (Bps)",
       "type": "timeseries"
     },
     {
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "datasource": {"type": "testdata", "uid": "testdata"},
       "fieldConfig": {
         "defaults": {
           "color": {"mode": "palette-classic"},
@@ -479,14 +368,7 @@
         "tooltip": {"mode": "multi", "sort": "desc"}
       },
       "targets": [
-        {
-          "datasource": {"type": "prometheus", "uid": "prometheus"},
-          "editorMode": "code",
-          "expr": "rate(node_network_transmit_bytes_total{device!=\"lo\"}[$__rate_interval])",
-          "legendFormat": "{{device}} tx",
-          "range": true,
-          "refId": "A"
-        }
+        {"datasource": {"type": "testdata", "uid": "testdata"}, "refId": "A", "scenarioId": "random_walk", "alias": "eth0 tx", "startValue": 524288, "spread": 104857, "noise": 3}
       ],
       "title": "Network Transmit (Bps)",
       "type": "timeseries"
