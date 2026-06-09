@@ -224,12 +224,14 @@
       border-radius: var(--r-lg);
       overflow: hidden;
       aspect-ratio: 4/3;
-      background: linear-gradient(135deg, #c9845a 0%, #8b3d13 45%, #2B2622 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 96px;
+      background: var(--ink);
       position: relative;
+    }
+    .hero-img-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .hero-badge {
       position: absolute;
@@ -306,15 +308,17 @@
       border-radius: var(--r-md);
       overflow: hidden;
       aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
+      background: var(--border);
     }
-    .craft-img:first-child { grid-column: 1 / -1; aspect-ratio: 16/9; font-size: 72px; }
-    .craft-img-1 { background: linear-gradient(135deg, #d4956a, #8b3a1f); }
-    .craft-img-2 { background: linear-gradient(135deg, #5a8a40, #2d5c20); }
-    .craft-img-3 { background: linear-gradient(135deg, #c8a96e, #8b6914); }
+    .craft-img:first-child { grid-column: 1 / -1; aspect-ratio: 16/9; }
+    .craft-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .craft-img:hover img { transform: scale(1.04); }
 
     /* ============================================================
        MENU PREVIEW
@@ -347,17 +351,17 @@
     }
     .menu-card-img {
       aspect-ratio: 4/3;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 56px;
+      overflow: hidden;
+      background: var(--border);
     }
-    .img-margherita { background: linear-gradient(135deg, #e8c97a, #c8531a); }
-    .img-bianca     { background: linear-gradient(135deg, #f0ead8, #c9a870); }
-    .img-prosciutto { background: linear-gradient(135deg, #c47a5a, #8b2c0f); }
-    .img-quattro    { background: linear-gradient(135deg, #e8d8a0, #c49840); }
-    .img-vegan      { background: linear-gradient(135deg, #8ac87a, #3d6b30); }
-    .img-diavola    { background: linear-gradient(135deg, #e8503a, #8b1a0a); }
+    .menu-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .menu-card:hover .menu-card-img img { transform: scale(1.06); }
     .menu-card-body { padding: var(--card-p); }
     .menu-card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; min-height: 22px; }
     .menu-card-name {
@@ -600,7 +604,13 @@
         </div>
       </div>
       <div style="position:relative">
-        <div class="hero-img-frame">🍕</div>
+        <div class="hero-img-frame">
+          <img
+            src="https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&h=675&q=85"
+            alt="Автентична неаполитанска пица пред горяща дървена пещ"
+            loading="eager"
+          >
+        </div>
         <div class="hero-badge">
           <div class="hero-badge-num">15+</div>
           <div class="hero-badge-label">вида пица</div>
@@ -645,9 +655,27 @@
       </div>
       <div>
         <div class="craft-img-grid">
-          <div class="craft-img craft-img-1">🍕</div>
-          <div class="craft-img craft-img-2">🌿</div>
-          <div class="craft-img craft-img-3">🍅</div>
+          <div class="craft-img">
+            <img
+              src="https://images.unsplash.com/photo-1606152196365-d1ce5ea838b5?auto=format&fit=crop&w=900&h=506&q=80"
+              alt="Пица вътре в горяща дървена пещ"
+              loading="lazy"
+            >
+          </div>
+          <div class="craft-img">
+            <img
+              src="https://images.unsplash.com/photo-1537734796389-e1fc293cf856?auto=format&fit=crop&w=450&h=450&q=80"
+              alt="Ръце, държащи перфектна топка тесто за пица"
+              loading="lazy"
+            >
+          </div>
+          <div class="craft-img">
+            <img
+              src="https://images.unsplash.com/photo-1612692177120-847e15b2815d?auto=format&fit=crop&w=450&h=450&q=80"
+              alt="Прясно изпечена пица на дъска пред пещта"
+              loading="lazy"
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -670,7 +698,9 @@
     <div class="menu-grid">
 
       <article class="menu-card">
-        <div class="menu-card-img img-margherita">🍕</div>
+        <div class="menu-card-img">
+          <img src="https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=600&h=450&q=80" alt="Маргарита пица с босилек" loading="lazy">
+        </div>
         <div class="menu-card-body">
           <div class="menu-card-tags">
             <span class="tag tag-red">Хит</span>
@@ -686,7 +716,9 @@
       </article>
 
       <article class="menu-card">
-        <div class="menu-card-img img-bianca">🧀</div>
+        <div class="menu-card-img">
+          <img src="https://images.unsplash.com/photo-1622880833523-7cf1c0bd4296?auto=format&fit=crop&w=600&h=450&q=80" alt="Бианка пица с рикота и пармезан" loading="lazy">
+        </div>
         <div class="menu-card-body">
           <div class="menu-card-tags">
             <span class="tag tag-red">Ново</span>
@@ -701,7 +733,9 @@
       </article>
 
       <article class="menu-card">
-        <div class="menu-card-img img-prosciutto">🥩</div>
+        <div class="menu-card-img">
+          <img src="https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=600&h=450&q=80" alt="Прошуто е Фунги пица" loading="lazy">
+        </div>
         <div class="menu-card-body">
           <div class="menu-card-tags"></div>
           <h3 class="menu-card-name">Прошуто е Фунги</h3>
@@ -714,7 +748,9 @@
       </article>
 
       <article class="menu-card">
-        <div class="menu-card-img img-quattro">🧀</div>
+        <div class="menu-card-img">
+          <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&h=450&q=80" alt="Куатро Формаджи пица с четири вида сирене" loading="lazy">
+        </div>
         <div class="menu-card-body">
           <div class="menu-card-tags">
             <span class="tag tag-red">Хит</span>
@@ -729,7 +765,9 @@
       </article>
 
       <article class="menu-card">
-        <div class="menu-card-img img-vegan">🥦</div>
+        <div class="menu-card-img">
+          <img src="https://images.unsplash.com/photo-1598023696416-0193a0bcd302?auto=format&fit=crop&w=600&h=450&q=80" alt="Прима Вера веган пица с зеленчуци" loading="lazy">
+        </div>
         <div class="menu-card-body">
           <div class="menu-card-tags">
             <span class="tag tag-green">Веган</span>
@@ -744,7 +782,9 @@
       </article>
 
       <article class="menu-card">
-        <div class="menu-card-img img-diavola">🌶</div>
+        <div class="menu-card-img">
+          <img src="https://images.unsplash.com/photo-1585828922344-85c9daa264b0?auto=format&fit=crop&w=600&h=450&q=80" alt="Диавола пикантна пица" loading="lazy">
+        </div>
         <div class="menu-card-body">
           <div class="menu-card-tags">
             <span class="tag tag-red">Пикантна</span>
