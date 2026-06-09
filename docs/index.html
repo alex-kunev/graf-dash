@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graf-dash | Observability Portfolio</title>
+  <style>
+    :root {
+      --bg:          #0f1117;
+      --surface:     #181b24;
+      --surface2:    #1f2535;
+      --border:      #2a2f42;
+      --text:        #e2e8f0;
+      --muted:       #7c879e;
+      --orange:      #f46800;
+      --blue:        #4c78f7;
+      --green:       #52c77a;
+      --yellow:      #f0c94d;
+      --red:         #e05c5c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      height: 54px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: var(--orange);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .logo-text strong { font-size: 15px; font-weight: 700; color: var(--text); }
+    .logo-text small  { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .pill-green  { background: rgba(82,199,122,.13); color: var(--green); }
+    .pill-orange { background: rgba(244,104,0,.13);  color: var(--orange); }
+    .pill-blue   { background: rgba(76,120,247,.13); color: var(--blue); }
+    .pill::before {
+      content: '';
+      width: 5px; height: 5px; border-radius: 50%;
+      background: currentColor;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .header-actions { display: flex; gap: 8px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 13px; border-radius: 6px;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; text-decoration: none;
+      transition: opacity .15s, background .15s;
+      white-space: nowrap;
+    }
+    .btn-ghost   { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--border); }
+    .btn-primary { background: var(--orange); color: #fff; }
+    .btn-primary:hover { opacity: .85; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      width: 248px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .aside-block {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .aside-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    /* nav */
+    nav { display: flex; flex-direction: column; gap: 2px; }
+
+    .nav-btn {
+      width: 100%;
+      display: flex; align-items: center; gap: 10px;
+      background: none; border: none;
+      color: var(--text); font-size: 13px;
+      padding: 9px 10px; border-radius: 6px;
+      cursor: pointer; text-align: left;
+      transition: background .12s;
+    }
+    .nav-btn:hover   { background: var(--surface2); }
+    .nav-btn.active  { background: rgba(244,104,0,.14); color: var(--orange); }
+    .nav-btn .ni     { width: 20px; text-align: center; font-size: 15px; }
+    .nav-btn .nlabel { flex: 1; }
+    .nav-btn .ntag   {
+      font-size: 9px; font-weight: 700; padding: 2px 5px;
+      border-radius: 3px; background: rgba(82,199,122,.15); color: var(--green);
+    }
+
+    /* stat grid */
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .stat-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 10px 12px;
+    }
+    .stat-card .sv { font-size: 18px; font-weight: 700; }
+    .stat-card .sl { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+    /* tags */
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tag {
+      font-size: 10px; padding: 3px 7px; border-radius: 4px;
+      background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
+    }
+
+    /* about */
+    .about-text { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    .toolbar {
+      height: 46px;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 18px; flex-shrink: 0; gap: 10px;
+    }
+
+    .toolbar-left { display: flex; align-items: center; gap: 8px; }
+    .toolbar-title { font-size: 14px; font-weight: 600; }
+    .toolbar-desc  { font-size: 11px; color: var(--muted); }
+
+    .toolbar-right { display: flex; gap: 8px; }
+
+    /* frame */
+    .frame-wrap {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .frame-wrap iframe {
+      width: 100%; height: 100%; border: none;
+    }
+
+    /* placeholder */
+    .placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px; padding: 32px;
+      text-align: center;
+    }
+    .ph-icon    { font-size: 52px; opacity: .35; }
+    .ph-title   { font-size: 18px; font-weight: 600; }
+    .ph-sub     { font-size: 13px; color: var(--muted); max-width: 420px; line-height: 1.6; }
+
+    .steps-card {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 18px 22px; max-width: 460px;
+      text-align: left; margin-top: 6px;
+    }
+    .steps-card h4 { font-size: 12px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+    .steps-card ol { padding-left: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .steps-card li { font-size: 12px; line-height: 1.55; color: var(--muted); }
+    .steps-card li strong { color: var(--text); }
+    .steps-card code {
+      background: var(--border); border-radius: 3px;
+      padding: 1px 5px; font-size: 11px; color: var(--orange);
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+  <a class="logo" href="#">
+    <div class="logo-mark">📊</div>
+    <div class="logo-text">
+      <strong>graf-dash</strong>
+      <small>Observability Portfolio</small>
+    </div>
+  </a>
+
+  <div class="header-center">
+    <span class="pill pill-green">demo-app live</span>
+    <span class="pill pill-orange">Prometheus scraping</span>
+    <span class="pill pill-blue">Grafana Cloud</span>
+  </div>
+
+  <div class="header-actions">
+    <a class="btn btn-ghost" href="https://graf-dash.onrender.com/metrics" target="_blank">📡 Metrics</a>
+    <a class="btn btn-ghost" href="https://github.com/alex-kunev/graf-dash" target="_blank">⭐ GitHub</a>
+    <a class="btn btn-primary" id="open-btn" href="#" target="_blank">Open in Grafana ↗</a>
+  </div>
+</header>
+
+<!-- ═══════════════ BODY ═══════════════ -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="aside-block">
+      <div class="aside-label">Dashboards</div>
+      <nav id="nav">
+        <button class="nav-btn active" onclick="select(this,'golden-signals')">
+          <span class="ni">⚡</span>
+          <span class="nlabel">Golden Signals</span>
+          <span class="ntag">SRE</span>
+        </button>
+        <button class="nav-btn" onclick="select(this,'service-overview')">
+          <span class="ni">🗂</span>
+          <span class="nlabel">Service Overview</span>
+        </button>
+        <button class="nav-btn" onclick="select(this,'slo-error-budget')">
+          <span class="ni">🎯</span>
+          <span class="nlabel">SLO / Error Budget</span>
+          <span class="ntag">SLO</span>
+        </button>
+        <button class="nav-btn" onclick="select(this,'infra-overview')">
+          <span class="ni">🖥</span>
+          <span class="nlabel">Infrastructure</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Live Stats</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="sv" style="color:var(--green)">5</div><div class="sl">Microservices</div></div>
+        <div class="stat-card"><div class="sv" style="color:var(--blue)">47</div><div class="sl">Dashboard panels</div></div>
+        <div class="stat-card"><div class="sv" style="color:var(--orange)">14</div><div class="sl">Alert rules</div></div>
+        <div class="stat-card"><div class="sv" style="color:var(--yellow)">99.9%</div><div class="sl">SLO target</div></div>
+      </div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">Tech Stack</div>
+      <div class="tag-cloud">
+        <span class="tag">Prometheus</span>
+        <span class="tag">Grafana</span>
+        <span class="tag">Python</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Render.com</span>
+        <span class="tag">Alertmanager</span>
+        <span class="tag">PromQL</span>
+        <span class="tag">Golden Signals</span>
+        <span class="tag">SLO / Error Budget</span>
+        <span class="tag">GitHub Actions</span>
+      </div>
+    </div>
+
+    <div class="aside-block">
+      <div class="aside-label">About</div>
+      <p class="about-text">
+        Production-grade observability stack simulating 5 microservices with realistic
+        traffic patterns, log-normal latency distributions, and multi-window
+        burn-rate SLO alerting (Google SRE Workbook pattern).
+      </p>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span id="t-icon" style="font-size:16px">⚡</span>
+        <span class="toolbar-title" id="t-title">Golden Signals</span>
+        <span class="toolbar-desc" id="t-desc">Latency · Traffic · Errors · Saturation</span>
+      </div>
+      <div class="toolbar-right">
+        <a class="btn btn-ghost" href="https://graf-dash.onrender.com/metrics" target="_blank">📡 Raw metrics</a>
+        <a class="btn btn-primary" id="dash-btn" href="#" target="_blank">Open in Grafana ↗</a>
+      </div>
+    </div>
+
+    <div class="frame-wrap" id="frame-wrap">
+      <!-- rendered by JS -->
+    </div>
+  </main>
+</div>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// CONFIGURATION
+// After importing dashboards into Grafana Cloud:
+//   1. Open a dashboard → Share → Public Dashboard → Enable
+//   2. Copy the public URL
+//   3. Paste it into the `url` field below
+//
+// Your Grafana Cloud base URL (e.g. https://yourname.grafana.net)
+// ─────────────────────────────────────────────────────────────
+const GRAFANA_BASE = 'https://yourname.grafana.net';
+
+const DASHBOARDS = {
+  'golden-signals': {
+    icon:  '⚡',
+    title: 'Golden Signals',
+    desc:  'Latency · Traffic · Errors · Saturation',
+    url:   'https://akkunev.grafana.net/public-dashboards/c0a2e7fa166743c0b74988ca8f9a918f',   // public dashboard embed URL
+  },
+  'service-overview': {
+    icon:  '🗂',
+    title: 'Service Overview',
+    desc:  'Per-service health table · Orders · Revenue · Active users',
+    url:   'https://akkunev.grafana.net/public-dashboards/716cb262adfa442ba4a3c465cd68b093',
+  },
+  'slo-error-budget': {
+    icon:  '🎯',
+    title: 'SLO / Error Budget',
+    desc:  '99.9% availability · Multi-window burn rate · Budget remaining',
+    url:   'https://akkunev.grafana.net/public-dashboards/ee3e213f95ea4a189004641c498995e1',
+  },
+  'infra-overview': {
+    icon:  '🖥',
+    title: 'Infrastructure Overview',
+    desc:  'CPU · Memory · Disk · Network (node-exporter)',
+    url:   'https://akkunev.grafana.net/public-dashboards/13f8168fccb4409eb24591f41344abba',
+  },
+};
+
+let current = 'golden-signals';
+
+function select(btn, key) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  current = key;
+  render(key);
+}
+
+function render(key) {
+  const d = DASHBOARDS[key];
+  document.getElementById('t-icon').textContent  = d.icon;
+  document.getElementById('t-title').textContent = d.title;
+  document.getElementById('t-desc').textContent  = d.desc;
+  document.getElementById('dash-btn').href = d.url || GRAFANA_BASE;
+  document.getElementById('open-btn').href = d.url || GRAFANA_BASE;
+
+  const wrap = document.getElementById('frame-wrap');
+
+  if (d.url) {
+    wrap.innerHTML = `<iframe src="${d.url}" allowfullscreen loading="lazy"></iframe>`;
+  } else {
+    wrap.innerHTML = `
+      <div class="placeholder">
+        <div class="ph-icon">${d.icon}</div>
+        <div class="ph-title">${d.title}</div>
+        <p class="ph-sub">
+          Add your Grafana Cloud public dashboard URL to embed the live dashboard here.
+        </p>
+        <div class="steps-card">
+          <h4>How to get the embed URL</h4>
+          <ol>
+            <li>Open <strong>Grafana Cloud</strong> → Dashboards → <strong>${d.title}</strong></li>
+            <li>Click <strong>Share</strong> (top toolbar) → <strong>Public Dashboard</strong> tab</li>
+            <li>Toggle <strong>"Enable public access"</strong> → click <strong>Save</strong></li>
+            <li>Copy the public URL it gives you</li>
+            <li>Open <code>docs/index.html</code> and paste it into the
+                <code>url</code> field for <code>'${key}'</code></li>
+          </ol>
+        </div>
+      </div>`;
+  }
+}
+
+// boot
+render('golden-signals');
+</script>
+</body>
+</html>
